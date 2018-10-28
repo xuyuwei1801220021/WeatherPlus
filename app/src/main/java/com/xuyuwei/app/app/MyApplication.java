@@ -1,16 +1,22 @@
 package com.xuyuwei.app.app;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.xuyuwei.app.com.xuyuwei.app.bean.City;
 import com.xuyuwei.app.db.CityDB;
+import com.xuyuwei.app.weatherplus.R;
+import com.xuyuwei.app.weatherplus.SelectCity;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +26,31 @@ public class MyApplication extends Application {
     private static MyApplication mApplication;
     private CityDB mCityDB;
 
+    private String[] cityname;
+    private String[] citycode;
+
     private List<City> mCityList;
+    private ListView mlistview;
     @Override
     public void onCreate(){
         super.onCreate();
         Log.d(TAG, "MyApplication->Oncreate");
         mApplication = this;
-
-        mCityDB = openCityDB();
-
-        initCityList();
+//
+//        mCityDB = openCityDB();
+//        mCityList = mCityDB.getAllCity();
+//        mlistview = (ListView) mlistview.findViewById((R.id.list_view));
+//        String[] cityName={"0"};
+//        int i=0;
+//        for (City city : mCityList) {
+//            cityName[i] = city.getCity();
+//            i++;
+//        }
+//        ArrayAdapter<String> adapter=new ArrayAdapter<String>(
+//                MyApplication.this,android.R.layout.simple_list_item_1,cityName);
+//        mlistview.setAdapter(adapter);
     }
+
     private void initCityList(){
         mCityList = new ArrayList<City>();
        new Thread(new Runnable(){
@@ -47,8 +67,15 @@ public class MyApplication extends Application {
             i++;
             String cityName = city.getCity();
             String cityCode = city.getNumber();
+//            cityname[i]=cityName;
+//            citycode[i]=cityCode;
             Log.d(TAG,cityCode+":"+cityName);
         }
+//        Intent intent = new Intent(MyApplication.this,SelectCity.class);
+//        intent.putExtra("CityName",cityname);
+//        intent.putExtra("CityCode",ci)
+//        startActivity(intent);
+
         Log.d(TAG, "i=" + i);
         return true;
     }
@@ -65,6 +92,7 @@ public class MyApplication extends Application {
                 + File.separator + "databases1"
                 + File.separator
                 + CityDB.CITY_DB_NAME;
+        Log.d(TAG, "dbpath=" + path);
         File db = new File(path);
         Log.d(TAG,path);
         if (!db.exists()) {
