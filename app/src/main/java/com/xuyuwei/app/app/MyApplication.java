@@ -37,7 +37,8 @@ public class MyApplication extends Application {
         Log.d(TAG, "MyApplication->Oncreate");
         mApplication = this;
 //
-//        mCityDB = openCityDB();
+       mCityDB = openCityDB();
+        initCityList();
 //        mCityList = mCityDB.getAllCity();
 //        mlistview = (ListView) mlistview.findViewById((R.id.list_view));
 //        String[] cityName={"0"};
@@ -67,7 +68,7 @@ public class MyApplication extends Application {
             i++;
             String cityName = city.getCity();
             String cityCode = city.getNumber();
-//            cityname[i]=cityName;
+            //cityname[i]=cityName;
 //            citycode[i]=cityCode;
             Log.d(TAG,cityCode+":"+cityName);
         }

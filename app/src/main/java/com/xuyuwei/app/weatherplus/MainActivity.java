@@ -288,26 +288,33 @@ public class MainActivity extends Activity implements View.OnClickListener{
         timeTv.setText(todayWeather.getUpdatetime()+ "·¢²¼");
         humidityTv.setText("Êª¶È£º"+todayWeather.getShidu());
         pmDataTv.setText(todayWeather.getPm25());
-        if (Integer.valueOf(todayWeather.getPm25()).intValue()<=50){
+        int pm2_5;
+        if(todayWeather.getPm25().equals("null")){
+            pm2_5=0;
+        }else
+        {
+            pm2_5=Integer.valueOf(todayWeather.getPm25()).intValue();
+        }
+        if (pm2_5<=50){
             pmImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_0_50));
         }
-        if ((Integer.valueOf(todayWeather.getPm25()).intValue()<=100)
-                &&(Integer.valueOf(todayWeather.getPm25()).intValue()>50)){
+       else if ((pm2_5<=100)
+                &&(pm2_5>50)){
             pmImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_51_100));
         }
-        if ((Integer.valueOf(todayWeather.getPm25()).intValue()<=150)
-                &&(Integer.valueOf(todayWeather.getPm25()).intValue()>100)){
+       else if ((pm2_5<=150)
+                &&(pm2_5>100)){
             pmImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_101_150));
         }
-        if ((Integer.valueOf(todayWeather.getPm25()).intValue()<=200)
-                &&(Integer.valueOf(todayWeather.getPm25()).intValue()>150)){
+       else if ((pm2_5<=200)
+                &&(pm2_5>150)){
             pmImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_151_200));
         }
-        if ((Integer.valueOf(todayWeather.getPm25()).intValue()<=300)
-                &&(Integer.valueOf(todayWeather.getPm25()).intValue()>200)){
+       else if ((pm2_5<=300)
+                &&(pm2_5>200)){
             pmImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_201_300));
         }
-        if ((Integer.valueOf(todayWeather.getPm25()).intValue()>300)){
+       else if ((pm2_5>300)){
             pmImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_greater_300));
         }
         pmQualityTv.setText(todayWeather.getQuality());
