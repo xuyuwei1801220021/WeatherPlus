@@ -8,7 +8,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +36,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private static final int UPDATE_TODAY_WEATHER = 1;
 
     private ImageView mUpdataBtn;
+    private ProgressBar progressBar;
+    private ProgressBar progressBarB;
 
     private ImageView mCitySelect;
     private TextView cityTv,timeTv,humidityTv,weekTv,pmDataTv,pmQualityTv,
                       temperatureTv,climateTv,windTv,city_name_Tv;
     private ImageView weatherImg,pmImg;
+    private String nowcity="101010100";
 
     private Handler mHandler = new Handler() {
 
@@ -55,9 +60,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+       // requestWindowFeature(Window.FEATURE_PROGRESS);
+        //绑定布局文件
         setContentView(R.layout.weather_logo);
 
         mUpdataBtn = (ImageView)findViewById(R.id.title_update_btn);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
+        progressBarB = (ProgressBar) findViewById(R.id.progressB);
+        //设置按钮监听
         mUpdataBtn.setOnClickListener(this);
         if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE){
             Log.d("WeatherPlus","网络正常");
@@ -69,6 +79,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         }
         mCitySelect = (ImageView) findViewById(R.id.title_city_manager);
         mCitySelect.setOnClickListener(this);
+        //初始化控件内容
         initView();
     }
 //初始化控件内容
@@ -144,21 +155,57 @@ public class MainActivity extends Activity implements View.OnClickListener{
     }
     //更新事件
     @Override
-    public void onClick(View view){
+    public void onClick(final View view){
         if(view.getId() == R.id.title_city_manager){
             Intent i = new Intent(this,SelectCity.class);
             //startActivity(i);
             startActivityForResult(i,1);
         }
         if (view.getId() == R.id.title_update_btn){
-            SharedPreferences sharedPreferences = getSharedPreferences("config",MODE_PRIVATE);
-            String cityCode = sharedPreferences.getString("main_city_code","101010100");//101160101
-            Log.d("WeatherPlus",cityCode);
+            progressBar.setVisibility(View.VISIBLE);
+            mUpdataBtn.setVisibility(View.INVISIBLE);
+            progressBarB.setVisibility(View.VISIBLE);
 
+            String newCityCode=nowcity;
+            if (newCityCode==null){
+                newCityCode="101010100";
+            }
+            SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+            final String cityCode = sharedPreferences.getString("main_city_code", newCityCode);//101160101
+            Log.d("WeatherPlus"," "+newCityCode);
             if (NetUtil.getNetworkState(this)!=NetUtil.NETWORN_NONE){
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        int i = 0;
+                        while (i < 100 && progressBar.getProgress() != 100) {
+                            try {
+                                Thread.sleep(20);
+                                // 更新进度条的进度,可以在子线程中更新进度条进度
+                                progressBar.incrementProgressBy(30);
+                                progressBarB.incrementProgressBy(30);
+                                i++;
+//                                if (progressBar.getProgress()>100){
+//                                    progressBar.setVisibility(View.INVISIBLE);
+//                                }
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                        }
+                        // 在进度条走完时删除Dialog
+                        queryWeatherCode(cityCode);
+
+                    }
+                }).start();
                 Log.d("WeatherPlus","网络正常");
-                queryWeatherCode(cityCode);
-            }else{
+
+
+
+                //progressBar.setVisibility(view.INVISIBLE);
+//                queryWeatherCode(cityCode);
+            } else {
                 Log.d("WeatherPlus","网络异常");
                 Toast.makeText(MainActivity.this,"网络异常",Toast.LENGTH_LONG).show();
             }
@@ -268,6 +315,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             String newCityCode= data.getStringExtra("cityCode");
+            nowcity=newCityCode;
             Log.d("WeatherPlus", "选择的城市代码为"+newCityCode);
             if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
                 Log.d("WeatherPlus", "网络OK");
@@ -288,13 +336,10 @@ public class MainActivity extends Activity implements View.OnClickListener{
         timeTv.setText(todayWeather.getUpdatetime()+ "发布");
         humidityTv.setText("湿度："+todayWeather.getShidu());
         pmDataTv.setText(todayWeather.getPm25());
-        int pm2_5;
-        if(todayWeather.getPm25().equals("null")){
-            pm2_5=0;
-        }else
-        {
-            pm2_5=Integer.valueOf(todayWeather.getPm25()).intValue();
-        }
+        int pm2_5=Integer.valueOf(todayWeather.getPm25()).intValue();
+       if(pm2_5==-1){
+           pmDataTv.setText("无");
+       }
         if (pm2_5<=50){
             pmImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_0_50));
         }
@@ -378,7 +423,10 @@ public class MainActivity extends Activity implements View.OnClickListener{
         if(todayWeather.getType().equals("中雨")){
             weatherImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongyu));
         }
-        windTv.setText("风力:"+todayWeather.getFengli());
+        windTv.setText("风力:" + todayWeather.getFengli());
+        progressBar.setVisibility(View.INVISIBLE);
+        progressBarB.setVisibility(View.INVISIBLE);
+        mUpdataBtn.setVisibility(View.VISIBLE);
         Toast.makeText(MainActivity.this,"更新成功！",Toast.LENGTH_SHORT).show();
     }
 

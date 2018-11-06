@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 <RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="45.0dp"
@@ -29,15 +31,33 @@
         android:layout_toRightOf="@+id/title_back"
         android:gravity="center"/>
 </RelativeLayout>
+<!--//空间换时统计位置，次品统计，自己写，只能依赖数学库-->
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relaone">
+
+<EditText
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:id="@+id/search_city"
+    android:layout_margin="4.0dp"
+    android:hint="搜索城市"
+    android:drawableLeft="@drawable/magnifying_glass"
+    android:drawablePadding="0dp"
+    android:singleLine="true"
+    android:background="@drawable/contact_search_box_edittext_keyword_background"
+    android:textColor="#000000"
+    android:textColorHint="#ffcccccc"
+    android:textSize="15dp"/>
+
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/list_view"
-            android:background="#ffffff">
+            android:background="#ffffff"
+            android:layout_below="@+id/search_city"
+            >
 
         </ListView>
     </RelativeLayout>

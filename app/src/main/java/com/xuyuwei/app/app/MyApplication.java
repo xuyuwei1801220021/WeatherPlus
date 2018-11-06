@@ -30,6 +30,7 @@ public class MyApplication extends Application {
     private String[] citycode;
 
     private List<City> mCityList;
+    private List<City> sCityList;
     private ListView mlistview;
     @Override
     public void onCreate(){
@@ -54,6 +55,7 @@ public class MyApplication extends Application {
 
     private void initCityList(){
         mCityList = new ArrayList<City>();
+        sCityList = new ArrayList<City>();
        new Thread(new Runnable(){
            @Override
        public void run(){
@@ -64,14 +66,14 @@ public class MyApplication extends Application {
     private boolean prepareCityList() {
         mCityList = mCityDB.getAllCity();
         int i=0;
-        for (City city : mCityList) {
-            i++;
-            String cityName = city.getCity();
-            String cityCode = city.getNumber();
-            //cityname[i]=cityName;
-//            citycode[i]=cityCode;
-            Log.d(TAG,cityCode+":"+cityName);
-        }
+//        for (City city : mCityList) {
+//            i++;
+//            String cityName = city.getCity();
+//            String cityCode = city.getNumber();
+//            //cityname[i]=cityName;
+////            citycode[i]=cityCode;
+//            Log.d(TAG,cityCode+":"+cityName);
+//        }
 //        Intent intent = new Intent(MyApplication.this,SelectCity.class);
 //        intent.putExtra("CityName",cityname);
 //        intent.putExtra("CityCode",ci)
@@ -82,6 +84,19 @@ public class MyApplication extends Application {
     }
     public List<City> getCityList() {
         return mCityList;
+    }
+    public List<City> getSearchCityList(String sname) {
+        sCityList = mCityDB.getSearchCity(sname);
+        int i=0;
+        for (City city : sCityList) {
+            i++;
+            String cityName = city.getCity();
+            String cityCode = city.getNumber();
+            //cityname[i]=cityName;
+//            citycode[i]=cityCode;
+            Log.d(TAG,cityCode+":"+cityName);
+        }
+        return sCityList;
     }
     public static MyApplication getInstance(){
         return mApplication;

@@ -5,7 +5,7 @@ public class TodayWeather {
     private String updatetime;
     private String wendu;
     private String shidu;
-    private String pm25="0";
+    private String pm25="-1";
     private String quality;
     private String fengxiang;
     private String fengli;
