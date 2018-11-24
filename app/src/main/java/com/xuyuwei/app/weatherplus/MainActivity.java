@@ -6,14 +6,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xuyuwei.app.adapter.MyAdapter;
 import com.xuyuwei.app.com.xuyuwei.app.bean.TodayWeather;
 import com.xuyuwei.app.util.NetUtil;
 
@@ -29,10 +31,11 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 //import java.util.logging.Handler;
-import java.util.logging.LogRecord;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class MainActivity extends Activity implements View.OnClickListener{
+public class MainActivity extends Activity  implements View.OnClickListener ,ViewPager.OnPageChangeListener{
     private static final int UPDATE_TODAY_WEATHER = 1;
 
     private ImageView mUpdataBtn;
@@ -44,6 +47,26 @@ public class MainActivity extends Activity implements View.OnClickListener{
                       temperatureTv,climateTv,windTv,city_name_Tv;
     private ImageView weatherImg,pmImg;
     private String nowcity="101010100";
+
+    private ViewPager viewPager;
+    private List<View> viewPagerList;
+    //¡˘ÃÏÃÏ?–≈œ¢’π æ
+//œ‘ æ¡Ω∏ˆ’π æ?
+    private MyAdapter vpAdapter;
+    private ViewPager vp;
+    private List<View> views;
+    //Œ™“˝µº?‘ˆº”?‘≤µ„
+    private ImageView[] dots; //¥Ê∑≈?‘≤µ„µƒºØ∫œ
+    private int[] ids = {R.id.iv1,R.id.iv2};
+    private ImageView weatherImg0,weatherImg1,weatherImg2,weatherImg3,weatherImg4,weatherImg5;
+    private TextView
+            week_today,temperature,climate,wind,
+            week_today1,temperature1,climate1,wind1,
+            week_today2,temperature2,climate2,wind2;
+    private TextView
+            week_today3,temperature3,climate3,wind3,
+            week_today4,temperature4,climate4,wind4,
+            week_today5,temperature5,climate5,wind5;
 
     private Handler mHandler = new Handler() {
 
@@ -81,8 +104,104 @@ public class MainActivity extends Activity implements View.OnClickListener{
         mCitySelect.setOnClickListener(this);
         //≥ı ºªØøÿº˛ƒ⁄»›
         initView();
+        //≥ı ºªØ¡Ω∏ˆª¨∂Ø??
+        initViews();
+        
     }
-//≥ı ºªØøÿº˛ƒ⁄»›
+
+    private void initViews() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        views = new ArrayList<View>();
+        views.add(inflater.inflate(R.layout.tianqilayout1, null));
+        views.add(inflater.inflate(R.layout.tianqilayout2, null));
+        week_today = (TextView) views.get(0).findViewById(R.id.week_today0);
+        temperature =(TextView) views.get(0).findViewById(R.id.temperature0);
+        climate =(TextView) views.get(0).findViewById(R.id.climate0);
+        wind = (TextView) views.get(0).findViewById(R.id.wind0);
+        weatherImg0 = (ImageView) views.get(0).findViewById(R.id.weather_img0);
+
+        week_today1 = (TextView) views.get(0).findViewById(R.id.week_today1);
+        temperature1 =(TextView) views.get(0).findViewById(R.id.temperature1);
+        climate1 =(TextView) views.get(0).findViewById(R.id.climate1);
+        wind1 = (TextView) views.get(0).findViewById(R.id.wind1);
+        weatherImg1 = (ImageView) views.get(0).findViewById(R.id.weather_img1);
+
+        week_today2 = (TextView) views.get(0).findViewById(R.id.week_today2);
+        temperature2 =(TextView) views.get(0).findViewById(R.id.temperature2);
+        climate2 =(TextView) views.get(0).findViewById(R.id.climate2);
+        wind2 = (TextView) views.get(0).findViewById(R.id.wind2);
+        weatherImg2 = (ImageView) views.get(0).findViewById(R.id.weather_img2);
+
+        week_today3 = (TextView) views.get(1).findViewById(R.id.week_today3);
+        temperature3 =(TextView) views.get(1).findViewById(R.id.temperature3);
+        climate3 =(TextView) views.get(1).findViewById(R.id.climate3);
+        wind3 = (TextView) views.get(1).findViewById(R.id.wind3);
+        weatherImg3 = (ImageView) views.get(1).findViewById(R.id.weather_img3);
+
+        week_today4 = (TextView) views.get(1).findViewById(R.id.week_today4);
+        temperature4 =(TextView) views.get(1).findViewById(R.id.temperature4);
+        climate4 =(TextView) views.get(1).findViewById(R.id.climate4);
+        wind4 = (TextView) views.get(1).findViewById(R.id.wind4);
+        weatherImg4 = (ImageView) views.get(1).findViewById(R.id.weather_img4);
+
+        week_today5 = (TextView) views.get(1).findViewById(R.id.week_today5);
+        temperature5 =(TextView) views.get(1).findViewById(R.id.temperature5);
+        climate5 =(TextView) views.get(1).findViewById(R.id.climate5);
+        wind5 = (TextView) views.get(1).findViewById(R.id.wind5);
+        weatherImg5 = (ImageView) views.get(1).findViewById(R.id.weather_img5);
+
+        week_today.setText("N/A");
+        temperature.setText("N/A");
+        climate.setText("N/A");
+        wind.setText("N/A");
+
+        week_today1.setText("N/A");
+        temperature1.setText("N/A");
+        climate1.setText("N/A");
+        wind1.setText("N/A");
+
+        week_today2.setText("N/A");
+        temperature2.setText("N/A");
+        climate2.setText("N/A");
+        wind2.setText("N/A");
+
+        week_today3.setText("N/A");
+        temperature3.setText("N/A");
+        climate3.setText("N/A");
+        wind3.setText("N/A");
+
+        week_today4.setText("N/A");
+        temperature4.setText("N/A");
+        climate4.setText("N/A");
+        wind4.setText("N/A");
+
+        week_today5.setText("N/A");
+        temperature5.setText("N/A");
+        climate5.setText("N/A");
+        wind5.setText("N/A");
+
+        vpAdapter = new MyAdapter(views,this);
+        vp = (ViewPager) findViewById(R.id.viewpager);
+        vp.setAdapter(vpAdapter);
+        //Œ™pageviewer≈‰÷√º‡Ã˝ ¬º˛
+        vp.setOnPageChangeListener(this);
+    }
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    //≥ı ºªØøÿº˛ƒ⁄»›
     void initView(){
         city_name_Tv = (TextView) findViewById(R.id.title_city_name);
         cityTv = (TextView) findViewById(R.id.city);
@@ -97,6 +216,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
         windTv = (TextView) findViewById(R.id.wind);
         weatherImg = (ImageView) findViewById(R.id.weather_img);
 
+
+
+
         city_name_Tv.setText("N/A");
         cityTv.setText("N/A");
         timeTv.setText("N/A");
@@ -107,6 +229,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
         temperatureTv.setText("N/A");
         climateTv.setText("N/A");
         windTv.setText("N/A");
+
+
+
 
     }
 
@@ -267,32 +392,169 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                 Log.d("WeatherPlus","fengxiang:" +xmlPullParser.getText());
                                 todayWeather.setFengxiang(xmlPullParser.getText());
                                 fengliCount++;
-                            }else if (xmlPullParser.getName().equals("fengli")&&fengliCount==0){
+                            }else if (xmlPullParser.getName().equals("fengxiang")&&fengxiangCount ==0){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","fengxiang:" +xmlPullParser.getText());
+                                todayWeather.setFengxiang(xmlPullParser.getText());
+                                fengliCount++;
+                            }
+                            else if (xmlPullParser.getName().equals("fengli")&&fengliCount==0){
                                 evenType = xmlPullParser.next();
                                 Log.d("WeatherPlus","fengli:" +xmlPullParser.getText());
                                 todayWeather.setFengli(xmlPullParser.getText());
                                 fengliCount++;
-                            }else if (xmlPullParser.getName().equals("date")&&dateCount==0){
+                            }else if (xmlPullParser.getName().equals("fengli")&&fengliCount==1){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","fengli1:" +xmlPullParser.getText());
+                                todayWeather.setWind1(xmlPullParser.getText());
+                                fengliCount++;
+                            }else if (xmlPullParser.getName().equals("fengli")&&fengliCount==2){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","fengli2:" +xmlPullParser.getText());
+                                todayWeather.setWind2(xmlPullParser.getText());
+                                fengliCount++;
+                            }else if (xmlPullParser.getName().equals("fengli")&&fengliCount==3){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","fengli3:" +xmlPullParser.getText());
+                                todayWeather.setWind3(xmlPullParser.getText());
+                                fengliCount++;
+                            }else if (xmlPullParser.getName().equals("fengli")&&fengliCount==4){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","fengli4:" +xmlPullParser.getText());
+                                todayWeather.setWind4(xmlPullParser.getText());
+                                fengliCount++;
+                            }else if (xmlPullParser.getName().equals("fengli")&&fengliCount==5){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","fengli5:" +xmlPullParser.getText());
+                                todayWeather.setWind5(xmlPullParser.getText());
+                                fengliCount++;
+                            }
+                            else if (xmlPullParser.getName().equals("date")&&dateCount==0){
                                 evenType = xmlPullParser.next();
                                 Log.d("WeatherPlus","date:" +xmlPullParser.getText());
                                 todayWeather.setDate(xmlPullParser.getText());
                                 dateCount++;
-                            }else if(xmlPullParser.getName().equals("high")&&highCount==0){
+                            }else if (xmlPullParser.getName().equals("date")&&dateCount==1){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","week_today1:" +xmlPullParser.getText());
+                                todayWeather.setWeek_today1(xmlPullParser.getText());
+                                dateCount++;
+                            }
+                            else if (xmlPullParser.getName().equals("date")&&dateCount==2){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","week_today2:" +xmlPullParser.getText());
+                                todayWeather.setWeek_today2(xmlPullParser.getText());
+                                dateCount++;
+                            }else if (xmlPullParser.getName().equals("date")&&dateCount==3){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","week_today3:" +xmlPullParser.getText());
+                                todayWeather.setWeek_today3(xmlPullParser.getText());
+                                dateCount++;
+                            }else if (xmlPullParser.getName().equals("date")&&dateCount==4){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","week_today4:" +xmlPullParser.getText());
+                                todayWeather.setWeek_today4(xmlPullParser.getText());
+                                dateCount++;
+                            }else if (xmlPullParser.getName().equals("date")&&dateCount==5){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","week_today5:" +xmlPullParser.getText());
+                                todayWeather.setWeek_today5(xmlPullParser.getText());
+                                dateCount++;
+                            }
+                            else if(xmlPullParser.getName().equals("high")&&highCount==0){
                                 evenType = xmlPullParser.next();
                                 Log.d("WeatherPlus","high:" +xmlPullParser.getText());
                                 todayWeather.setHigh(xmlPullParser.getText().substring(2).trim());
                                 highCount++;
-                            }else if (xmlPullParser.getName().equals("low")&&lowCount==0){
+                            }else if(xmlPullParser.getName().equals("high")&&highCount==1){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","high1:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureH1(xmlPullParser.getText().substring(2).trim());
+                                highCount++;
+                            }else if(xmlPullParser.getName().equals("high")&&highCount==2){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","high2:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureH2(xmlPullParser.getText().substring(2).trim());
+                                highCount++;
+                            }else if(xmlPullParser.getName().equals("high")&&highCount==3){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","high3:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureH3(xmlPullParser.getText().substring(2).trim());
+                                highCount++;
+                            }else if(xmlPullParser.getName().equals("high")&&highCount==4){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","high4:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureH4(xmlPullParser.getText().substring(2).trim());
+                                highCount++;
+                            }else if(xmlPullParser.getName().equals("high")&&highCount==5){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","high5:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureH(xmlPullParser.getText().substring(2).trim());
+                                highCount++;
+                            }
+                            else if (xmlPullParser.getName().equals("low")&&lowCount==0){
                                 evenType = xmlPullParser.next();
                                 Log.d("WeatherPlus","low:" +xmlPullParser.getText());
                                 todayWeather.setLow(xmlPullParser.getText().substring(2).trim());
                                 lowCount++;
-                            }else if (xmlPullParser.getName().equals("type")&&typeCount==0){
+                            }else if (xmlPullParser.getName().equals("low")&&lowCount==1){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","low1:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureL1(xmlPullParser.getText().substring(2).trim());
+                                lowCount++;
+                            }else if (xmlPullParser.getName().equals("low")&&lowCount==2){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","low2:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureL2(xmlPullParser.getText().substring(2).trim());
+                                lowCount++;
+                            }else if (xmlPullParser.getName().equals("low")&&lowCount==3){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","low3:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureL3(xmlPullParser.getText().substring(2).trim());
+                                lowCount++;
+                            }else if (xmlPullParser.getName().equals("low")&&lowCount==4){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","low4:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureL4(xmlPullParser.getText().substring(2).trim());
+                                lowCount++;
+                            }else if (xmlPullParser.getName().equals("low")&&lowCount==5){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","low5:" +xmlPullParser.getText());
+                                todayWeather.setTemperatureL5(xmlPullParser.getText().substring(2).trim());
+                                lowCount++;
+                            }
+                            else if (xmlPullParser.getName().equals("type")&&typeCount==0){
                                 evenType = xmlPullParser.next();
                                 Log.d("WeatherPlus","type:" +xmlPullParser.getText());
                                 todayWeather.setType(xmlPullParser.getText());
                                 typeCount++;
+                            } else if (xmlPullParser.getName().equals("type")&&typeCount==1){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","type1:" +xmlPullParser.getText());
+                                todayWeather.setClimate1(xmlPullParser.getText());
+                                typeCount++;
+                            }else if (xmlPullParser.getName().equals("type")&&typeCount==2){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","type2:" +xmlPullParser.getText());
+                                todayWeather.setClimate2(xmlPullParser.getText());
+                                typeCount++;
+                            }else if (xmlPullParser.getName().equals("type")&&typeCount==3){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","type3:" +xmlPullParser.getText());
+                                todayWeather.setClimate3(xmlPullParser.getText());
+                                typeCount++;
+                            }else if (xmlPullParser.getName().equals("type")&&typeCount==4){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","type4:" +xmlPullParser.getText());
+                                todayWeather.setClimate4(xmlPullParser.getText());
+                                typeCount++;
+                            }else if (xmlPullParser.getName().equals("type")&&typeCount==5){
+                                evenType = xmlPullParser.next();
+                                Log.d("WeatherPlus","type5:" +xmlPullParser.getText());
+                                todayWeather.setClimate5(xmlPullParser.getText());
+                                typeCount++;
                             }
+
                         }
 
                         break;
@@ -336,6 +598,382 @@ public class MainActivity extends Activity implements View.OnClickListener{
         timeTv.setText(todayWeather.getUpdatetime()+ "∑¢≤º");
         humidityTv.setText(" ™∂»£∫"+todayWeather.getShidu());
         pmDataTv.setText(todayWeather.getPm25());
+
+        wind.setText(todayWeather.getFengli());
+        week_today.setText(todayWeather.getDate());
+        temperature.setText(todayWeather.getHigh()+"~"+todayWeather.getLow());
+        climate.setText(todayWeather.getType());
+
+        if(todayWeather.getType().equals("«Á")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_qing));
+
+        }
+        if(todayWeather.getType().equals("±©—©")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoxue));
+        }
+        if(todayWeather.getType().equals("±©”Í")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoyu));
+        }
+        if(todayWeather.getType().equals("¥Û±©”Í")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dabaoyu));
+        }
+        if(todayWeather.getType().equals("¥Û—©")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_daxue));
+        }
+        if(todayWeather.getType().equals("¥Û”Í")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dayu));
+        }
+        if(todayWeather.getType().equals("∂‡‘∆")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_duoyun));
+        }
+        if(todayWeather.getType().equals("¿◊’Û”Í")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyu));
+        }
+        if(todayWeather.getType().equals("¿◊’Û”Í±˘±¢")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyubingbao));
+        }
+        if(todayWeather.getType().equals("…≥≥æ±©")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_shachenbao));
+        }
+        if(todayWeather.getType().equals("Ãÿ¥Û±©”Í")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_tedabaoyu));
+        }
+        if(todayWeather.getType().equals("–°—©")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoxue));
+        }
+        if(todayWeather.getType().equals("–°”Í")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoyu));
+        }
+        if(todayWeather.getType().equals("“ı")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yin));
+        }
+        if(todayWeather.getType().equals("”Íº–—©")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yujiaxue));
+        }
+        if(todayWeather.getType().equals("’Û—©")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenxue));
+        }
+        if(todayWeather.getType().equals("’Û”Í")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenyu));
+        }
+        if(todayWeather.getType().equals("÷–—©")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongxue));
+        }
+        if(todayWeather.getType().equals("÷–”Í")){
+            weatherImg0.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongyu));
+        }
+
+        week_today1.setText(todayWeather.getWeek_today1());
+        temperature1.setText(todayWeather.getTemperatureH1()+"~"+todayWeather.getTemperatureL1());
+        climate1.setText(todayWeather.getClimate1());
+        wind1.setText(todayWeather.getWind1());
+
+        if(todayWeather.getClimate1().equals("«Á")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_qing));
+        }
+        if(todayWeather.getClimate1().equals("±©—©")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoxue));
+        }
+        if(todayWeather.getClimate1().equals("±©”Í")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoyu));
+        }
+        if(todayWeather.getClimate1().equals("¥Û±©”Í")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dabaoyu));
+        }
+        if(todayWeather.getClimate1().equals("¥Û—©")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_daxue));
+        }
+        if(todayWeather.getClimate1().equals("¥Û”Í")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dayu));
+        }
+        if(todayWeather.getClimate1().equals("∂‡‘∆")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_duoyun));
+        }
+        if(todayWeather.getClimate1().equals("¿◊’Û”Í")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyu));
+        }
+        if(todayWeather.getClimate1().equals("¿◊’Û”Í±˘±¢")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyubingbao));
+        }
+        if(todayWeather.getClimate1().equals("…≥≥æ±©")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_shachenbao));
+        }
+        if(todayWeather.getClimate1().equals("Ãÿ¥Û±©”Í")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_tedabaoyu));
+        }
+        if(todayWeather.getClimate1().equals("–°—©")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoxue));
+        }
+        if(todayWeather.getClimate1().equals("–°”Í")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoyu));
+        }
+        if(todayWeather.getClimate1().equals("“ı")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yin));
+        }
+        if(todayWeather.getClimate1().equals("”Íº–—©")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yujiaxue));
+        }
+        if(todayWeather.getClimate1().equals("’Û—©")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenxue));
+        }
+        if(todayWeather.getClimate1().equals("’Û”Í")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenyu));
+        }
+        if(todayWeather.getClimate1().equals("÷–—©")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongxue));
+        }
+        if(todayWeather.getClimate1().equals("÷–”Í")){
+            weatherImg1.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongyu));
+        }
+
+        week_today2.setText(todayWeather.getWeek_today2());
+        temperature2.setText(todayWeather.getTemperatureH2()+"~"+todayWeather.getTemperatureL2());
+        climate2.setText(todayWeather.getClimate2());
+        wind2.setText(todayWeather.getWind2());
+        if(todayWeather.getClimate2().equals("«Á")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_qing));
+        }
+        if(todayWeather.getClimate2().equals("±©—©")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoxue));
+        }
+        if(todayWeather.getClimate2().equals("±©”Í")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoyu));
+        }
+        if(todayWeather.getClimate2().equals("¥Û±©”Í")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dabaoyu));
+        }
+        if(todayWeather.getClimate2().equals("¥Û—©")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_daxue));
+        }
+        if(todayWeather.getClimate2().equals("¥Û”Í")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dayu));
+        }
+        if(todayWeather.getClimate2().equals("∂‡‘∆")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_duoyun));
+        }
+        if(todayWeather.getClimate2().equals("¿◊’Û”Í")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyu));
+        }
+        if(todayWeather.getClimate2().equals("¿◊’Û”Í±˘±¢")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyubingbao));
+        }
+        if(todayWeather.getClimate2().equals("…≥≥æ±©")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_shachenbao));
+        }
+        if(todayWeather.getClimate2().equals("Ãÿ¥Û±©”Í")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_tedabaoyu));
+        }
+        if(todayWeather.getClimate2().equals("–°—©")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoxue));
+        }
+        if(todayWeather.getClimate2().equals("–°”Í")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoyu));
+        }
+        if(todayWeather.getClimate2().equals("“ı")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yin));
+        }
+        if(todayWeather.getClimate2().equals("”Íº–—©")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yujiaxue));
+        }
+        if(todayWeather.getClimate2().equals("’Û—©")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenxue));
+        }
+        if(todayWeather.getClimate2().equals("’Û”Í")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenyu));
+        }
+        if(todayWeather.getClimate2().equals("÷–—©")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongxue));
+        }
+        if(todayWeather.getClimate2().equals("÷–”Í")){
+            weatherImg2.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongyu));
+        }
+
+        week_today3.setText(todayWeather.getWeek_today3());
+        temperature3.setText(todayWeather.getTemperatureH3()+"~"+todayWeather.getTemperatureL3());
+        climate3.setText(todayWeather.getClimate3());
+        wind3.setText(todayWeather.getWind3());
+
+        if(todayWeather.getClimate3().equals("«Á")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_qing));
+        }
+        if(todayWeather.getClimate3().equals("±©—©")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoxue));
+        }
+        if(todayWeather.getClimate3().equals("±©”Í")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoyu));
+        }
+        if(todayWeather.getClimate3().equals("¥Û±©”Í")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dabaoyu));
+        }
+        if(todayWeather.getClimate3().equals("¥Û—©")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_daxue));
+        }
+        if(todayWeather.getClimate3().equals("¥Û”Í")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dayu));
+        }
+        if(todayWeather.getClimate3().equals("∂‡‘∆")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_duoyun));
+        }
+        if(todayWeather.getClimate3().equals("¿◊’Û”Í")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyu));
+        }
+        if(todayWeather.getClimate3().equals("¿◊’Û”Í±˘±¢")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyubingbao));
+        }
+        if(todayWeather.getClimate3().equals("…≥≥æ±©")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_shachenbao));
+        }
+        if(todayWeather.getClimate3().equals("Ãÿ¥Û±©”Í")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_tedabaoyu));
+        }
+        if(todayWeather.getClimate3().equals("–°—©")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoxue));
+        }
+        if(todayWeather.getClimate3().equals("–°”Í")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoyu));
+        }
+        if(todayWeather.getClimate3().equals("“ı")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yin));
+        }
+        if(todayWeather.getClimate3().equals("”Íº–—©")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yujiaxue));
+        }
+        if(todayWeather.getClimate3().equals("’Û—©")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenxue));
+        }
+        if(todayWeather.getClimate3().equals("’Û”Í")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenyu));
+        }
+        if(todayWeather.getClimate3().equals("÷–—©")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongxue));
+        }
+        if(todayWeather.getClimate3().equals("÷–”Í")){
+            weatherImg3.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongyu));
+        }
+        week_today4.setText(todayWeather.getWeek_today4());
+        temperature4.setText(todayWeather.getTemperatureH4()+"~"+todayWeather.getTemperatureL4());
+        climate4.setText(todayWeather.getClimate4());
+        wind4.setText(todayWeather.getWind4());
+        if(todayWeather.getClimate4().equals("«Á")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_qing));
+        }
+        if(todayWeather.getClimate4().equals("±©—©")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoxue));
+        }
+        if(todayWeather.getClimate4().equals("±©”Í")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoyu));
+        }
+        if(todayWeather.getClimate4().equals("¥Û±©”Í")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dabaoyu));
+        }
+        if(todayWeather.getClimate4().equals("¥Û—©")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_daxue));
+        }
+        if(todayWeather.getClimate4().equals("¥Û”Í")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dayu));
+        }
+        if(todayWeather.getClimate4().equals("∂‡‘∆")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_duoyun));
+        }
+        if(todayWeather.getClimate4().equals("¿◊’Û”Í")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyu));
+        }
+        if(todayWeather.getClimate4().equals("¿◊’Û”Í±˘±¢")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyubingbao));
+        }
+        if(todayWeather.getClimate4().equals("…≥≥æ±©")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_shachenbao));
+        }
+        if(todayWeather.getClimate4().equals("Ãÿ¥Û±©”Í")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_tedabaoyu));
+        }
+        if(todayWeather.getClimate4().equals("–°—©")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoxue));
+        }
+        if(todayWeather.getClimate4().equals("–°”Í")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoyu));
+        }
+        if(todayWeather.getClimate4().equals("“ı")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yin));
+        }
+        if(todayWeather.getClimate4().equals("”Íº–—©")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yujiaxue));
+        }
+        if(todayWeather.getClimate4().equals("’Û—©")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenxue));
+        }
+        if(todayWeather.getClimate4().equals("’Û”Í")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenyu));
+        }
+        if(todayWeather.getClimate4().equals("÷–—©")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongxue));
+        }
+        if(todayWeather.getClimate4().equals("÷–”Í")){
+            weatherImg4.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongyu));
+        }
+
+        week_today5.setText(todayWeather.getWeek_today5());
+        temperature5.setText(todayWeather.getTemperatureH5()+"~"+todayWeather.getTemperatureL5());
+        climate5.setText(todayWeather.getClimate5());
+        wind5.setText(todayWeather.getWind5());
+
+        if(todayWeather.getClimate5().equals("«Á")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_qing));
+        }
+        if(todayWeather.getClimate5().equals("±©—©")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoxue));
+        }
+        if(todayWeather.getClimate5().equals("±©”Í")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoyu));
+        }
+        if(todayWeather.getClimate5().equals("¥Û±©”Í")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dabaoyu));
+        }
+        if(todayWeather.getClimate5().equals("¥Û—©")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_daxue));
+        }
+        if(todayWeather.getClimate5().equals("¥Û”Í")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_dayu));
+        }
+        if(todayWeather.getClimate5().equals("∂‡‘∆")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_duoyun));
+        }
+        if(todayWeather.getClimate5().equals("¿◊’Û”Í")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyu));
+        }
+        if(todayWeather.getClimate5().equals("¿◊’Û”Í±˘±¢")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_leizhenyubingbao));
+        }
+        if(todayWeather.getClimate5().equals("…≥≥æ±©")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_shachenbao));
+        }
+        if(todayWeather.getClimate5().equals("Ãÿ¥Û±©”Í")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_tedabaoyu));
+        }
+        if(todayWeather.getClimate5().equals("–°—©")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoxue));
+        }
+        if(todayWeather.getClimate5().equals("–°”Í")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_xiaoyu));
+        }
+        if(todayWeather.getClimate5().equals("“ı")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yin));
+        }
+        if(todayWeather.getClimate5().equals("”Íº–—©")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_yujiaxue));
+        }
+        if(todayWeather.getClimate5().equals("’Û—©")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenxue));
+        }
+        if(todayWeather.getClimate5().equals("’Û”Í")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhenyu));
+        }
+        if(todayWeather.getClimate5().equals("÷–—©")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongxue));
+        }
+        if(todayWeather.getClimate5().equals("÷–”Í")){
+            weatherImg5.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_zhongyu));
+        }
         int pm2_5=Integer.valueOf(todayWeather.getPm25()).intValue();
        if(pm2_5==-1){
            pmDataTv.setText("Œﬁ");
@@ -368,6 +1006,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         climateTv.setText(todayWeather.getType());
         if(todayWeather.getType().equals("«Á")){
             weatherImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_qing));
+
         }
         if(todayWeather.getType().equals("±©—©")){
             weatherImg.setImageDrawable(getResources().getDrawable(R.drawable.biz_plugin_weather_baoxue));
@@ -429,5 +1068,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
         mUpdataBtn.setVisibility(View.VISIBLE);
         Toast.makeText(MainActivity.this,"∏¸–¬≥…π¶£°",Toast.LENGTH_SHORT).show();
     }
+
 
 }

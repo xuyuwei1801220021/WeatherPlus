@@ -37,13 +37,16 @@
            android:layout_alignParentRight="true"
            android:layout_gravity="center"
            android:src="@drawable/title_update"/>
-       <ProgressBar
-           android:layout_width="45.0dip"
-           android:layout_height="45.0dip"
+       <!-- 更新旋转-->
+        <ProgressBar
+           android:layout_width="25.0dip"
+           android:layout_height="25.0dip"
            android:id="@+id/progressB"
            android:layout_alignParentRight="true"
+            android:layout_marginTop="10.5dp"
+            android:layout_marginRight="15dp"
            android:layout_gravity="center"
-           android:indeterminateTint="@color/abc_primary_text_disable_only_material_light"
+           android:indeterminateTint="#ffffff"
            android:visibility="invisible"/>
         <ImageView
            android:layout_width="45.0dip"
@@ -71,6 +74,7 @@
         <ProgressBar
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-9dp"
             android:id="@+id/progress"
             style="?android:attr/progressBarStyleHorizontal"
             android:progress="0"
@@ -186,6 +190,7 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/zhong"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/pm2_5_content"
                 android:layout_centerVertical="true"
@@ -203,6 +208,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:layout_toRightOf="@+id/weather_img"
                     android:layout_centerInParent="true">
                     <TextView
@@ -252,6 +258,42 @@
                         android:textSize="30.0sp"/>
                 </RelativeLayout>
 
+
+            </RelativeLayout>
+
+            <!-- 六⽇天⽓信息 -->
+            <RelativeLayout
+                android:id="@+id/sixDay_waeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/zhong"
+                android:padding="10.0dip">
+                <!--展示滑动⻚⾯-->
+                <android.support.v4.view.ViewPager
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:id="@+id/viewpager">
+                </android.support.v4.view.ViewPager>
+                <LinearLayout
+                    android:id="@+id/indicator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_alignParentBottom="true">
+                <ImageView
+                    android:id="@+id/iv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:background="#1111"/>
+                    <ImageView
+                        android:id="@+id/iv2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:background="#1111"/>
+                </LinearLayout>
 
             </RelativeLayout>
         </RelativeLayout>
